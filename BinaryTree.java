@@ -1,6 +1,6 @@
 
 /*
- * *** PLACE YOUR NAME / SECTION HERE ***
+ * *** Julia Harper / Assignemnt 2 - 272 -002 ***
  *
  * Homework # 2 (Programming Assignment). This Java class defines a few basic
  * manipulation operations of a binary trees.
@@ -224,6 +224,10 @@ public class BinaryTree {
 
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
+        if (node == null) return; // Base case — stop recursion if node is null
+        if (node.data == oldVal) node.data = newVal; // If current node matches oldVal, replace with newVal
+        replaceValueHelper(node.left, oldVal, newVal); // Recurse on left subtree
+        replaceValueHelper(node.right, oldVal, newVal); //  Recurse on right subtree
 
     }
 
@@ -246,8 +250,9 @@ public class BinaryTree {
 
         // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
         // BINARY TREE (WHICH IS BASED ON RECURSION)
-
-        return Integer.MAX_VALUE;
+        if (node == null) return Integer.MAX_VALUE; // base case
+        return Math.min(node.data, Math.min(findMinHelper(node.left), findMinHelper(node.right)));
+        // recursively find min in left and right subtrees, compare with current
     }
 
 
@@ -264,53 +269,28 @@ public class BinaryTree {
      * in very few lines of code.
      */
 
+  
+
     private int nodesGTHelper(Node node, int val) {
-
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
-
-        // RETURNING -1 IN THIS STUB, WHICH WILL FAIL ALL TESTS. REPLACE IT WITH YOUR CODE
-
-
-        return -1;
+        if (node == null) return 0; // base case
+        int count = (node.data > val) ? 1 : 0; // count this node if greater than val
+        count += nodesGTHelper(node.left, val); //count from left subtree
+        count += nodesGTHelper(node.right, val); // sadd count from right subtree
+        return count; // return total count
     }
 
-
-    /*
-     * public method average()
-     *
-     * This method will traverse the tree using depth first search traversal and
-     * return the average value contained in the binary tree. To easily perform a depth
-     * first traversal, it invokes the helper method, averageHelper(), which is the
-     * method that should be called recursively. If the tree is empty, 0 should be
-     * returned.
-     *
-     * IMPORTANT NOTE:
-     * The helper method should return an array of two integer values. In index
-     * location [0] is the sum of all data values in the tree. And in index
-     * location [1] is the count of nodes.
-     *
-     * As can be seen in the method average() immediately below, the returned average
-     * value is calculated as "sum / count".
-     *
-     * Depth first search of the tree is based on recursion. This will result
-     * in very few lines of code within the helper method.
-     */
-
     public double average() {
-        int[] sumAndCount = averageHelper(root);
-        return (double) sumAndCount[0] / sumAndCount[1];
+        int[] sumAndCount = averageHelper(root); //get sum and count from helper
+        if (sumAndCount[1] == 0) return 0.0; // avoid divide by zero for empty tree
+        return (double) sumAndCount[0] / sumAndCount[1]; //compute average
     }
 
     private int[] averageHelper(Node n) {
-
-        // ADD YOUR CODE HERE -- USE DEPTH FIRST SEARCH OF
-        // BINARY TREE (WHICH IS BASED ON RECURSION)
-
-        // RECALL, IF THE TREE IS EMPTY, RETURN 0 FOR BOTH THE SUM AND
-        // COUNT LOCATIONS IN THE RETURNED ARRAY AS SHOWN BELOW, ELSE
-        // THE 'SUM' IS RETURNED IN INDEX LOCATION 0, AND COUNT IS LOCATION 1
-
-        return new int[]{0, 0};
+        if (n == null) return new int[]{0, 0}; //  base case for empty subtree
+        int[] left = averageHelper(n.left); // sum/count from left
+        int[] right = averageHelper(n.right); // sum/count from right
+        int sum = n.data + left[0] + right[0]; // sum = current + left + right
+        int count = 1 + left[1] + right[1]; //  count = 1 (this node) + left + right
+        return new int[]{sum, count}; //  return sum and count as array
     }
-}
+} 
